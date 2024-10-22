@@ -1,0 +1,75 @@
+import java.util.HashMap;
+import java.util.Scanner;
+
+// Class to represent the currency converter
+class CurrencyConverter {
+    // Simulate exchange rates using a HashMap (this should ideally be fetched from an API)
+    private HashMap<String, Double> exchangeRates;
+
+    // Constructor to initialize some mock exchange rates
+    public CurrencyConverter() {
+        exchangeRates = new HashMap<>();
+        // Example rates (base currency: USD)
+        exchangeRates.put("USD_INR", 83.0); // 1 USD = 83 INR
+        exchangeRates.put("USD_EUR", 0.94); // 1 USD = 0.94 EUR
+        exchangeRates.put("INR_USD", 0.012); // 1 INR = 0.012 USD
+        exchangeRates.put("INR_EUR", 0.011); // 1 INR = 0.011 EUR
+        exchangeRates.put("EUR_USD", 1.06); // 1 EUR = 1.06 USD
+        exchangeRates.put("EUR_INR", 88.0); // 1 EUR = 88 INR
+    }
+
+    // Method to get the exchange rate for a given pair of currencies
+    public double getExchangeRate(String baseCurrency, String targetCurrency) {
+        String key = baseCurrency + "_" + targetCurrency;
+        if (exchangeRates.containsKey(key)) {
+            return exchangeRates.get(key);
+        } else {
+            System.out.println("Exchange rate for " + baseCurrency + " to " + targetCurrency + " not found.");
+            return -1;
+        }
+    }
+
+    // Method to perform currency conversion
+    public double convertCurrency(String baseCurrency, String targetCurrency, double amount) {
+        double rate = getExchangeRate(baseCurrency, targetCurrency);
+        if (rate != -1) {
+            return amount * rate;
+        } else {
+            return -1; // Error code for invalid rate
+        }
+    }
+}
+
+// Main class to run the currency conversion program
+public class CurrencyConversionApp {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        CurrencyConverter converter = new CurrencyConverter();
+
+        System.out.println("Welcome to the Currency Converter!");
+
+        // Input base currency
+        System.out.print("Enter the base currency (e.g., USD, INR, EUR): ");
+        String baseCurrency = scanner.nextLine().toUpperCase();
+
+        // Input target currency
+        System.out.print("Enter the target currency (e.g., USD, INR, EUR): ");
+        String targetCurrency = scanner.nextLine().toUpperCase();
+
+        // Input amount to convert
+        System.out.print("Enter the amount to convert: ");
+        double amount = scanner.nextDouble();
+
+        // Perform the currency conversion
+        double convertedAmount = converter.convertCurrency(baseCurrency, targetCurrency, amount);
+
+        // Display the result
+        if (convertedAmount != -1) {
+            System.out.printf("%.2f %s = %.2f %s%n", amount, baseCurrency, convertedAmount, targetCurrency);
+        } else {
+            System.out.println("Currency conversion failed. Please check the currencies and try again.");
+        }
+
+        scanner.close();
+    }
+}
